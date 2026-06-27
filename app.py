@@ -6,7 +6,14 @@ from sklearn.preprocessing import OneHotEncoder
 from scipy.stats import poisson
 import kagglehub
 from kagglehub import KaggleDatasetAdapter
+import streamlit as st
 
+# Agrega esto al inicio de tu código:
+st.title("Simulador Inteligente Mundial 2026")
+st.markdown("""
+### Resumen Estadístico
+Este modelo utiliza **Regresión de Poisson** para estimar probabilidades de goles basadas en el rendimiento histórico de las selecciones.
+""")
 st.set_page_config(page_title="Simulador Mundial 2026", layout="wide")
 st.title("⚽ Simulador Inteligente Mundial 2026")
 
