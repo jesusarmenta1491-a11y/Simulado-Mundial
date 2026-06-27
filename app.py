@@ -23,8 +23,8 @@ with col2:
     Este modelo utiliza **Regresión de Poisson** para estimar probabilidades de goles basadas en el rendimiento histórico.
     """)
 
-st.image("cancha.jpg", use_container_width=True)
-st.markdown("---")MODELO ---
+st.markdown("---") # Esta línea crea la raya divisoria
+st.markdown("### MODELO") # Pon el título dentro de las comillas
 @st.cache_resource
 def obtener_modelo():
     df = kagglehub.load_dataset(KaggleDatasetAdapter.PANDAS, "martj42/international-football-results-from-1872-to-2017", "results.csv")
