@@ -16,7 +16,7 @@ col1, col2 = st.columns([1, 4])
 
 with col1:
     if os.path.exists("copa1.png"):
-        st.image("copa.png", use_container_width=True)
+        st.image("copa1.png", use_container_width=True)
 
 with col2:
     st.title("Simulador Inteligente Mundial 2026")
