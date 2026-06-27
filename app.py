@@ -6,27 +6,16 @@ from sklearn.preprocessing import OneHotEncoder
 from scipy.stats import poisson
 import kagglehub
 from kagglehub import KaggleDatasetAdapter
-import os
 
 # CONFIGURACIÓN
 st.set_page_config(page_title="Simulador Mundial 2026", layout="wide")
 
 # --- ENCABEZADO ---
-col1, col2 = st.columns([1, 4])
-
-with col1:
-    if os.path.exists("copa1.png"):
-        st.image("copa1.png", use_container_width=True)
-
-with col2:
-    st.title("Simulador Inteligente Mundial 2026")
-    st.markdown("""
-    ### Resumen Estadístico
-    Este modelo utiliza **Regresión de Poisson** para estimar probabilidades de goles basadas en el rendimiento histórico.
-    """)
-
-if os.path.exists("cancha.jpg"):
-    st.image("cancha.jpg", use_container_width=True)
+st.title("Simulador Inteligente Mundial 2026")
+st.markdown("""
+### Resumen Estadístico
+Este modelo utiliza **Regresión de Poisson** para estimar probabilidades de goles basadas en el rendimiento histórico de las selecciones.
+""")
 
 st.markdown("---")
 
@@ -53,12 +42,16 @@ def obtener_modelo():
     m_visit = PoissonRegressor(alpha=1e-5, max_iter=300).fit(X, partidos['away_score'])
     return encoder, m_local, m_visit
 
+# --- LECTURA DE PARTIDOS ---
 def cargar_partidos():
-    if not os.path.exists("partidos.csv"):
+    try:
+        df_jornada = pd.read_csv("partidos.csv")
+        return {f"{row['local']} vs {row['visitante']}": (row['local'], row['visitante']) 
+                for _, row in df_jornada.iterrows()}
+    except Exception:
         return {}
-    df_jornada = pd.read_csv("partidos.csv")
-    return {f"{row['local']} vs {row['visitante']}": (row['local'], row['visitante']) for _, row in df_jornada.iterrows()}
 
+# --- INTERFAZ ---
 encoder, m_local, m_visit = obtener_modelo()
 partidos_disponibles = cargar_partidos()
 
@@ -67,10 +60,9 @@ if partidos_disponibles:
     local, visitante = partidos_disponibles[seleccion]
 
     if st.button("Calcular Predicción"):
-        # Corregido: Crear DataFrame con las columnas correctas para el encoder
         input_data = pd.DataFrame([{'home_team': local, 'away_team': visitante}])
         encoded_data = encoder.transform(input_data[['home_team', 'away_team']]).toarray()
-        partido_input = np.hstack((encoded_data, [[1]])) # El 1 asume campo neutral
+        partido_input = np.hstack((encoded_data, [[1]])) 
         
         l_local = m_local.predict(partido_input)[0]
         l_visit = m_visit.predict(partido_input)[0]
@@ -97,4 +89,4 @@ if partidos_disponibles:
         df_resultados["Probabilidad"] = df_resultados["Probabilidad"].apply(lambda x: f"{x*100:.2f}%")
         st.table(df_resultados.sort_values(by="Probabilidad", ascending=False).head(10))
 else:
-    st.warning("No se pudo cargar 'partidos.csv'. Asegúrate de que existe.")
+    st.warning("No se encontró 'partidos.csv'. Asegúrate de tener tu archivo de partidos subido.")
