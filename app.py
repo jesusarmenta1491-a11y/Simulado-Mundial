@@ -6,18 +6,25 @@ from sklearn.preprocessing import OneHotEncoder
 from scipy.stats import poisson
 import kagglehub
 from kagglehub import KaggleDatasetAdapter
-import streamlit as st
 
-# Agrega esto al inicio de tu código:
-st.title("Simulador Inteligente Mundial 2026")
-st.markdown("""
-### Resumen Estadístico
-Este modelo utiliza **Regresión de Poisson** para estimar probabilidades de goles basadas en el rendimiento histórico de las selecciones.
-""")
+# CONFIGURACIÓN (Debe ir antes de cualquier otro comando de st)
 st.set_page_config(page_title="Simulador Mundial 2026", layout="wide")
-st.title("⚽ Simulador Inteligente Mundial 2026")
 
-# --- MODELO ---
+# --- ENCABEZADO ---
+col1, col2 = st.columns([1, 4])
+
+with col1:
+    st.image("copa.png", use_container_width=True)
+
+with col2:
+    st.title("Simulador Inteligente Mundial 2026")
+    st.markdown("""
+    ### Resumen Estadístico
+    Este modelo utiliza **Regresión de Poisson** para estimar probabilidades de goles basadas en el rendimiento histórico.
+    """)
+
+st.image("cancha.jpg", use_container_width=True)
+st.markdown("---")MODELO ---
 @st.cache_resource
 def obtener_modelo():
     df = kagglehub.load_dataset(KaggleDatasetAdapter.PANDAS, "martj42/international-football-results-from-1872-to-2017", "results.csv")
