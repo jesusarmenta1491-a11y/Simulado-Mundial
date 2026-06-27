@@ -15,7 +15,7 @@ st.set_page_config(page_title="Simulador Mundial 2026", layout="wide")
 col1, col2 = st.columns([1, 4])
 
 with col1:
-    if os.path.exists("copa.png"):
+    if os.path.exists("copa1.png"):
         st.image("copa.png", use_container_width=True)
 
 with col2:
