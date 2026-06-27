@@ -78,7 +78,12 @@ if partidos_disponibles:
                 if g_l > g_v: prob_gana += prob
                 elif g_l == g_v: prob_empata += prob
                 else: prob_pierde += prob
-                resultados.append({"Marcador": f"{g_l} - {g_v}", "Probabilidad": prob})
+                
+                # Se incluye el nombre de los equipos en el marcador
+                resultados.append({
+                    "Marcador": f"{local} {g_l} - {g_v} {visitante}", 
+                    "Probabilidad": prob
+                })
         
         c1, c2, c3 = st.columns(3)
         c1.metric(f"Victoria {local}", f"{prob_gana*100:.1f}%")
