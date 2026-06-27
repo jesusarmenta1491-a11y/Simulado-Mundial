@@ -85,8 +85,9 @@ if partidos_disponibles:
         c2.metric("Empate", f"{prob_empata*100:.1f}%")
         c3.metric(f"Victoria {visitante}", f"{prob_pierde*100:.1f}%")
         
+        st.write("### Mejores Probabilidades de Marcador")
         df_resultados = pd.DataFrame(resultados)
         df_resultados["Probabilidad"] = df_resultados["Probabilidad"].apply(lambda x: f"{x*100:.2f}%")
-        st.table(df_resultados.sort_values(by="Probabilidad", ascending=False).head(10))
+        st.table(df_resultados.sort_values(by="Probabilidad", ascending=False).head(10).reset_index(drop=True))
 else:
     st.warning("No se encontró 'partidos.csv'. Asegúrate de tener tu archivo de partidos subido.")
